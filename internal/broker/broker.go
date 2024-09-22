@@ -8,4 +8,5 @@ import (
 
 type Broker interface {
 	Consume(ctx context.Context, consumerChan chan *models.Appointment) error
+	Close() error
 }

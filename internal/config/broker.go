@@ -8,6 +8,10 @@ const (
 	defaultHost = "localhost:9092"
 )
 
+func GetEnvHost() string {
+	return envHost
+}
+
 type broker struct {
 	host string
 }
