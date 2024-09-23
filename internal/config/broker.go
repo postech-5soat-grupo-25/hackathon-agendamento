@@ -9,7 +9,7 @@ const (
 )
 
 func GetEnvHost() string {
-	return envHost
+	return viper.GetString(envHost)
 }
 
 type broker struct {

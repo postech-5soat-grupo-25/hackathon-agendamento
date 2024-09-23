@@ -6,11 +6,18 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"log/slog"
+	"time"
 
 	"github.com/streadway/amqp"
 
 	"github.com/postech-5soat-grupo-25/hackathon-agendamento/internal/config"
 	"github.com/postech-5soat-grupo-25/hackathon-agendamento/internal/models"
+)
+
+var (
+	conn *amqp.Connection
+	err  error
 )
 
 type RabbitMqImpl struct {
@@ -33,7 +40,7 @@ func (r *RabbitMqImpl) Consume(ctx context.Context, consumerChan chan *models.Ap
 	if err != nil {
 		return fmt.Errorf("failed to register a consumer: %v", err)
 	}
-
+	fmt.Println("Waiting for messages. To exit press CTRL+C")
 	// Start consuming messages
 	go func() {
 		for {
@@ -68,22 +75,31 @@ func (r *RabbitMqImpl) Close() error {
 	return r.conn.Close()
 }
 
-func NewBroker() (Broker, error) {
+func NewBroker(ctx context.Context) (Broker, error) {
 	// Get the RabbitMQ URL from environment variable
 	amqpURL := config.GetEnvHost()
 	if amqpURL == "" {
 		return nil, errors.New("RABBITMQ_URL environment variable is not set")
 	}
 
-	// Connect to RabbitMQ
-	conn, err := amqp.Dial(amqpURL)
-	if err != nil {
-		return nil, fmt.Errorf("failed to connect to RabbitMQ: %v", err)
+	for {
+		conn, err = amqp.Dial(amqpURL)
+		if err == nil {
+			break
+		}
+		slog.Log(ctx, slog.LevelError, err.Error())
+		slog.Log(ctx, slog.LevelError, "Failed to connect to RabbitMQ, retrying in 5 seconds...")
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(5 * time.Second):
+		}
 	}
 
 	// Create a channel
 	ch, err := conn.Channel()
 	if err != nil {
+		slog.Log(ctx, slog.LevelError, err.Error())
 		conn.Close()
 		return nil, fmt.Errorf("failed to open a channel: %v", err)
 	}
@@ -98,6 +114,7 @@ func NewBroker() (Broker, error) {
 		nil,            // arguments
 	)
 	if err != nil {
+		slog.Log(ctx, slog.LevelError, err.Error())
 		ch.Close()
 		conn.Close()
 		return nil, fmt.Errorf("failed to declare a queue: %v", err)

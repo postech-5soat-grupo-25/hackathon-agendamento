@@ -9,8 +9,15 @@ services:
       - "8080:8080"
     depends_on:
       - rabbitmq
+      - postgres
     environment:
       - BROKER_HOST=amqp://guest:guest@rabbitmq:5672/
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWD=postgres
+      - DB_NAME=agendamento
+    restart: always
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -23,5 +30,17 @@ services:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
 
+  postgres:
+    image: postgres:13
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=agendamento
+
 volumes:
   rabbitmq_data:
+  postgres_data:

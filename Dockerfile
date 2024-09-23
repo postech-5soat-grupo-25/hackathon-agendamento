@@ -1,10 +1,9 @@
-FROM golang:1.20-alpine AS builder
+FROM golang:1.23.1-alpine AS builder
 
 WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+RUN go mod download
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd
 
 FROM alpine:latest
 WORKDIR /root/

@@ -3,6 +3,7 @@ module github.com/postech-5soat-grupo-25/hackathon-agendamento
 go 1.23.1
 
 require (
+	github.com/lib/pq v1.10.9
 	github.com/spf13/viper v1.19.0
 	github.com/streadway/amqp v1.1.0
 )

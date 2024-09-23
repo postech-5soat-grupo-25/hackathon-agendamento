@@ -7,6 +7,7 @@ import (
 
 	"github.com/postech-5soat-grupo-25/hackathon-agendamento/internal/broker"
 	"github.com/postech-5soat-grupo-25/hackathon-agendamento/internal/models"
+	"github.com/postech-5soat-grupo-25/hackathon-agendamento/internal/storage"
 )
 
 type AgendaServiceImpl struct {
@@ -14,6 +15,7 @@ type AgendaServiceImpl struct {
 
 	ctx    context.Context
 	broker broker.Broker
+	db     storage.Storage
 }
 
 func (a *AgendaServiceImpl) StartBroker() error {
@@ -40,13 +42,25 @@ func (a *AgendaServiceImpl) AgendaTask() error {
 }
 
 func NewAgendaService() (AgendaService, error) {
-	broker, err := broker.NewBroker()
+	ctx := context.Background()
+	broker, err := broker.NewBroker(ctx)
 	if err != nil {
+		slog.Log(ctx, slog.LevelError, err.Error())
 		return nil, err
 	}
+	slog.Log(ctx, slog.LevelDebug, "broker connected")
+
+	db, err := storage.NewStorage(ctx)
+	if err != nil {
+		slog.Log(ctx, slog.LevelError, err.Error())
+		return nil, err
+	}
+	slog.Log(ctx, slog.LevelDebug, "storage connected")
+	fmt.Println("Done with Connections")
 	return &AgendaServiceImpl{
 		make(chan *models.Appointment),
-		context.Background(),
+		ctx,
 		broker,
+		db,
 	}, nil
 }

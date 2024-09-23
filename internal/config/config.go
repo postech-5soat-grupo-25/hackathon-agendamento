@@ -5,7 +5,8 @@ import (
 )
 
 var (
-	Broker *broker
+	Broker   *broker
+	Postgres *postgres
 )
 
 func init() {
@@ -14,4 +15,5 @@ func init() {
 
 func LoadConfig() {
 	LoadBrokerConfig()
+	LoadPostgresConfig()
 }
