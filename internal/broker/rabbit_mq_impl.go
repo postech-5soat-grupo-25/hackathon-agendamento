@@ -26,7 +26,7 @@ type RabbitMqImpl struct {
 	queue   amqp.Queue
 }
 
-func (r *RabbitMqImpl) Consume(ctx context.Context, consumerChan chan *models.Appointment) error {
+func (r *RabbitMqImpl) Consume(ctx context.Context, consumerChan chan *models.Message) error {
 	// Set up consumer
 	msgs, err := r.channel.Consume(
 		r.queue.Name,            // queue
@@ -51,14 +51,14 @@ func (r *RabbitMqImpl) Consume(ctx context.Context, consumerChan chan *models.Ap
 				if !ok {
 					return
 				}
-				appointment := &models.Appointment{}
-				err := json.Unmarshal(d.Body, appointment)
+				message := &models.Message{}
+				err := json.Unmarshal(d.Body, message)
 				if err != nil {
 					log.Printf("Error unmarshaling message: %v", err)
-					d.Nack(false, true)
+					d.Nack(false, false)
 					continue
 				}
-				consumerChan <- appointment
+				consumerChan <- message
 				d.Ack(false)
 			}
 		}

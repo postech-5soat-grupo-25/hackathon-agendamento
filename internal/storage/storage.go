@@ -7,4 +7,6 @@ type Storage interface {
 	GetAgendamentos() ([]*models.Appointment, error)
 	CreateAgendamento(agendamento *models.Appointment) error
 	ExcluirAgendamento(id string) error
+	CreateOrEditWorkingHours(workhours *models.WorkingHours) error
+	GetWorkingHours(id_doctor int) (*models.WorkingHours, error)
 }

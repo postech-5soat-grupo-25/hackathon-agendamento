@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"log/slog"
 	"time"
-
-	_ "github.com/lib/pq"
+	"fmt"
+	"github.com/lib/pq"
 
 	"github.com/postech-5soat-grupo-25/hackathon-agendamento/internal/config"
 	"github.com/postech-5soat-grupo-25/hackathon-agendamento/internal/models"
@@ -16,6 +16,10 @@ var (
 	db  *sql.DB
 	err error
 )
+
+const getWorkingHoursQuery = `SELECT id, doctor_id, start_time, end_time, days_of_week 
+                               FROM working_hours 
+                               WHERE doctor_id = $1;`
 
 type Postgres struct {
 	db *sql.DB
@@ -34,6 +38,26 @@ func (p *Postgres) CreateAgendamento(agendamento *models.Appointment) error {
 
 func (p *Postgres) ExcluirAgendamento(id string) error {
 	return nil
+}
+
+func (p *Postgres) CreateOrEditWorkingHours(workhours *models.WorkingHours) error {
+	return nil
+}
+
+func (p *Postgres)GetWorkingHours(id_doctor int) (*models.WorkingHours, error) {
+    row := p.db.QueryRow(getWorkingHoursQuery, id_doctor)
+
+    var wh models.WorkingHours
+	var daysOfWeek pq.BoolArray
+    err := row.Scan(&wh.ID, &wh.DoctorID, &wh.StartTime, &wh.EndTime, &daysOfWeek)
+    if err != nil {
+        if err == sql.ErrNoRows {
+            return nil, fmt.Errorf("no working hours found for doctor_id: %d", id_doctor)
+        }
+        return nil, fmt.Errorf("failed to query working hours: %w", err)
+    }
+	wh.DaysOfWeek = []bool(daysOfWeek)
+    return &wh, nil
 }
 
 func NewStorage(ctx context.Context) (Storage, error) {
