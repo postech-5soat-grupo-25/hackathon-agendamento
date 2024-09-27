@@ -82,16 +82,17 @@ func (p *Postgres) CreateAgendamento(agendamento *models.Appointment) (*models.A
     var count int
     err = p.db.QueryRow(checkAvailabilityQuery, agendamento.DoctorID, agendamento.ClientID, agendamento.AppointmentTime).Scan(&count)
     if err != nil {
+        fmt.Println("failed to insert appointment: %w", err)
         return nil, fmt.Errorf("failed to check availability: %w", err)
     }
 
     if count > 0 {
         return nil, fmt.Errorf("doctor or client already has an appointment at this time")
     }
-
     var appointmentID int
     err = p.db.QueryRow(insertAppointmentQuery, agendamento.DoctorID, agendamento.ClientID, agendamento.AppointmentTime, agendamento.Description).Scan(&appointmentID)
     if err != nil {
+        fmt.Println("failed to insert appointment: %w", err)
         return nil, fmt.Errorf("failed to insert appointment: %w", err)
     }
 
@@ -157,8 +158,10 @@ func (p *Postgres)GetWorkingHours(id_doctor int) (*models.WorkingHours, error) {
     err := row.Scan(&wh.ID, &wh.DoctorID, &wh.StartTime, &wh.EndTime, &daysOfWeek)
     if err != nil {
         if err == sql.ErrNoRows {
+            fmt.Println("failed to GetWorkingHours: %w", err)
             return nil, fmt.Errorf("no working hours found for doctor_id: %d", id_doctor)
         }
+        fmt.Println("failed to GetWorkingHours: %w", err)
         return nil, fmt.Errorf("failed to query working hours: %w", err)
     }
 	wh.DaysOfWeek = []bool(daysOfWeek)

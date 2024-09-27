@@ -3,9 +3,9 @@ package models
 import "time"
 
 type Appointment struct {
-	ID             int        `json:"id"`
-    DoctorID       int        `json:"doctor_id"`
-    ClientID       int        `json:"client_id"`
-	AppointmentTime time.Time `json:"appointment_time"`
-	Description string        `json:"description"`
+	ID             int        `json:"ID"`
+    DoctorID       int        `json:"DoctorID"`
+    ClientID       int        `json:"ClientID"`
+	AppointmentTime time.Time `json:"AppointmentTime"`
+	Description string        `json:"Description"`
 }

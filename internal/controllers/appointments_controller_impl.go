@@ -1,6 +1,7 @@
 package controllers
 
 import (
+    "fmt"
     "time"
     "encoding/json"
     "github.com/postech-5soat-grupo-25/hackathon-agendamento/internal/models"
@@ -51,14 +52,15 @@ func (s *AppointmentsController) GetWorkingHours(doctorID int) models.Response {
 }
 
 func (s *AppointmentsController) ScheduleAppointment(appointment *models.Appointment) models.Response {
-    now := time.Now()
-    oneHourLater := now.Add(1 * time.Hour)
-    if (!appointment.AppointmentTime.After(oneHourLater)){
-        return errorResponse(400, "Consultas devem ser marcadas com 1 hora de antecendencia")
-    }
+    // now := time.Now()
+    // oneHourLater := now.Add(1 * time.Hour)
+    // if (!appointment.AppointmentTime.After(oneHourLater)){
+    //     return errorResponse(400, "Consultas devem ser marcadas com 1 hora de antecendencia")
+    // }
 
     wkhrs, err := s.storage.GetWorkingHours(appointment.DoctorID)
     if err != nil {
+        fmt.Println("failed to GetWorkingHours: %w", err)
         return errorResponse(500, "Undefined error")
     }
 
@@ -123,7 +125,6 @@ func isWithinWorkingHours(wkhrs *models.WorkingHours, appointmentTime time.Time)
         return false
     }
 
-    // Check if the appointment is within start and end time
     startTime := wkhrs.StartTime.Hour()*60 + wkhrs.StartTime.Minute()
     endTime := wkhrs.EndTime.Hour()*60 + wkhrs.EndTime.Minute()
     appointmentTimeInMinutes := appointmentHour*60 + appointmentMinute

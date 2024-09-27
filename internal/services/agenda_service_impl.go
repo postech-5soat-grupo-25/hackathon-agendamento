@@ -37,6 +37,7 @@ func (a *AgendaServiceImpl) AgendaTask() error {
 			// consume message
 			// API
 			//slog.Log(a.ctx, slog.LevelInfo, "Appointment scheduled")
+			fmt.Println(msg.Type)
 			switch msg.Type {
 				case models.GetDoctorWorkingHoursMessageType:
 					var message models.GetDoctorWorkingHoursMessage
@@ -46,7 +47,8 @@ func (a *AgendaServiceImpl) AgendaTask() error {
 					}
 					response := a.controller.GetWorkingHours(message.DoctorID)
 
-					fmt.Println(response)
+					fmt.Println(response.StatusCode)
+					fmt.Println(string(response.Body))
 
 				case models.WorkingHoursMessage:
 					var message models.WorkingHours
@@ -56,7 +58,8 @@ func (a *AgendaServiceImpl) AgendaTask() error {
 					}
 					response := a.controller.CreateOrEditWorkingHours(&message)
 
-					fmt.Println(response)
+					fmt.Println(response.StatusCode)
+					fmt.Println(string(response.Body))
 
 				case models.GetClientAppointmentsMessage:
 					var message models.GenericIDMessage
@@ -65,7 +68,8 @@ func (a *AgendaServiceImpl) AgendaTask() error {
 						return fmt.Errorf("failed to unmarshal GetClientAppointmentsMessage message: %v", err)
 					}
 					response := a.controller.GetClientAppointments(message.ID)
-					fmt.Println(response)
+					fmt.Println(response.StatusCode)
+					fmt.Println(string(response.Body))
 
 				case models.AppointmentMessage:
 					var message models.Appointment
@@ -74,7 +78,8 @@ func (a *AgendaServiceImpl) AgendaTask() error {
 						return fmt.Errorf("failed to unmarshal AppointmentMessage message: %v", err)
 					}
 					response := a.controller.ScheduleAppointment(&message)
-					fmt.Println(response)
+					fmt.Println(response.StatusCode)
+					fmt.Println(string(response.Body))
 
 				case models.CancelScheduledAppointmentMessage:
 					var message models.GenericIDMessage
@@ -83,10 +88,13 @@ func (a *AgendaServiceImpl) AgendaTask() error {
 						return fmt.Errorf("failed to unmarshal CancelScheduledAppointmentMessage message: %v", err)
 					}
 					response := a.controller.CancelScheduledAppointment(message.ID)
-					fmt.Println(response)
-
+					fmt.Println(response.StatusCode)
+					fmt.Println(string(response.Body))
+				
+				default:
+					fmt.Println("Unrecognized message type:" + msg.Type)
 			}
-			fmt.Println(msg.Type)
+	
 		case <-a.ctx.Done():
 			return a.ctx.Err()
 		}

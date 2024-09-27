@@ -20,9 +20,12 @@ async function sendMessage() {
 
         // Message to be sent
         const message = {
-            type: "getdoctorworkinghours",
+            type: "appointment",
             body: {
-                DoctorID: 123
+                DoctorID: 123,
+                ClientID: 456,
+                AppointmentTime: "2024-09-30T10:30:00Z",
+                Description: "Routine check-up"
             }
         };
 
@@ -61,3 +64,29 @@ function generateUuid() {
 
 // Call the function to send a message
 sendMessage();
+
+
+// const message = {
+//     type: "getdoctorworkinghours",
+//     body: {
+//         DoctorID: 123
+//     }
+// };
+
+
+// const message = {
+//     type: "getappointment",
+//     body: {
+//         ID: 456
+//     }
+// };
+
+// const message = {
+//     type: "createappointment",
+//     body: {
+//         DoctorID: 123,
+//         ClientID: 456,
+//         AppointmentTime: "2024-09-26T10:30:00Z", // Example appointment time in ISO format
+//         Description: "Routine check-up"
+//     }
+// };
