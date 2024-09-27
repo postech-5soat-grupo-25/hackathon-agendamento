@@ -178,12 +178,12 @@ func NewStorage(ctx context.Context) (Storage, error) {
 		}
 
 		slog.Log(ctx, slog.LevelError, "Failed to connect to database", "error", err)
-		slog.Log(ctx, slog.LevelError, "Retrying in 2 seconds...")
+		slog.Log(ctx, slog.LevelError, "Retrying in 10 seconds...")
 
 		select {
 		case <-ctx.Done():
 			return nil, ctx.Err()
-		case <-time.After(2 * time.Second):
+		case <-time.After(10 * time.Second):
 		}
 	}
 

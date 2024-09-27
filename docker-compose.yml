@@ -6,29 +6,16 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "3000:3000"
     depends_on:
-      - rabbitmq
       - postgres
     environment:
-      - BROKER_HOST=amqp://guest:guest@rabbitmq:5672/
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWD=postgres
       - DB_NAME=agendamento
     restart: always
-
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
 
   postgres:
     image: postgres:13
@@ -42,5 +29,4 @@ services:
       - POSTGRES_DB=agendamento
 
 volumes:
-  rabbitmq_data:
   postgres_data:
