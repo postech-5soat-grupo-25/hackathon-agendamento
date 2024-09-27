@@ -3,9 +3,9 @@ package models
 import "time"
 
 type WorkingHours struct {
-    ID         int       `json:"id"`
-    DoctorID   int       `json:"doctor_id"`    
-    StartTime  time.Time `json:"start_time"`   
-    EndTime    time.Time `json:"end_time"`     
-    DaysOfWeek []bool     `json:"days_of_week"`
+    ID         int       `json:"ID"`
+    DoctorID   int       `json:"DoctorID"`    
+    StartTime  time.Time `json:"StartTime"`   
+    EndTime    time.Time `json:"EndTime"`     
+    DaysOfWeek []bool     `json:"DaysOfWeek"`
 }

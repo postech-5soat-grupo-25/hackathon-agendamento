@@ -134,10 +134,12 @@ func isWithinWorkingHours(wkhrs *models.WorkingHours, appointmentTime time.Time)
 
 func validateWorkingHours(hours models.WorkingHours) bool {
     if len(hours.DaysOfWeek) != 7 {
+        fmt.Println("aqui")
         return false
     }
 
     if hours.EndTime.Before(hours.StartTime) {
+        fmt.Println("eu")
         return false
     }
 

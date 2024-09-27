@@ -20,12 +20,12 @@ async function sendMessage() {
 
         // Message to be sent
         const message = {
-            type: "appointment",
+            type: "workinghours",
             body: {
                 DoctorID: 123,
-                ClientID: 456,
-                AppointmentTime: "2024-09-30T10:30:00Z",
-                Description: "Routine check-up"
+                StartTime: "2024-09-26T09:00:00Z", 
+                EndTime: "2024-09-26T17:00:00Z",  
+                DaysOfWeek: [true, true, true, true, true, false, false]
             }
         };
 
