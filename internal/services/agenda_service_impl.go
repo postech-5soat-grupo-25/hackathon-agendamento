@@ -42,16 +42,49 @@ func (a *AgendaServiceImpl) AgendaTask() error {
 					var message models.GetDoctorWorkingHoursMessage
 					err := json.Unmarshal(msg.Body, &message)
 					if err != nil {
-						return fmt.Errorf("failed to unmarshal TypeA message: %v", err)
+						return fmt.Errorf("failed to unmarshal GetDoctorWorkingHoursMessageType message: %v", err)
 					}
-					response, err := a.controller.GetWorkingHours(message.DoctorID)
-
-					if (err != nil) {
-						fmt.Println(err);
-						break; //TODO treat error here
-					}
+					response := a.controller.GetWorkingHours(message.DoctorID)
 
 					fmt.Println(response)
+
+				case models.WorkingHoursMessage:
+					var message models.WorkingHours
+					err := json.Unmarshal(msg.Body, &message)
+					if err != nil {
+						return fmt.Errorf("failed to unmarshal WorkingHours message: %v", err)
+					}
+					response := a.controller.CreateOrEditWorkingHours(&message)
+
+					fmt.Println(response)
+
+				case models.GetClientAppointmentsMessage:
+					var message models.GenericIDMessage
+					err := json.Unmarshal(msg.Body, &message)
+					if err != nil {
+						return fmt.Errorf("failed to unmarshal GetClientAppointmentsMessage message: %v", err)
+					}
+					response := a.controller.GetClientAppointments(message.ID)
+					fmt.Println(response)
+
+				case models.AppointmentMessage:
+					var message models.Appointment
+					err := json.Unmarshal(msg.Body, &message)
+					if err != nil {
+						return fmt.Errorf("failed to unmarshal AppointmentMessage message: %v", err)
+					}
+					response := a.controller.ScheduleAppointment(&message)
+					fmt.Println(response)
+
+				case models.CancelScheduledAppointmentMessage:
+					var message models.GenericIDMessage
+					err := json.Unmarshal(msg.Body, &message)
+					if err != nil {
+						return fmt.Errorf("failed to unmarshal CancelScheduledAppointmentMessage message: %v", err)
+					}
+					response := a.controller.CancelScheduledAppointment(message.ID)
+					fmt.Println(response)
+
 			}
 			fmt.Println(msg.Type)
 		case <-a.ctx.Done():
