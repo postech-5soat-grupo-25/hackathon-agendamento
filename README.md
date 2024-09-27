@@ -1,6 +1,6 @@
 # `Hackathon` | PosTech 5SOAT • Grupo 25
 
-![agendamento](https://img.shields.io/badge/agendamento-blue?color=%23d63865) ![go](https://img.shields.io/badge/Go-505050?logo=go&logoColor=FFFFFF&labelColor=00ADD8) ![postgresql](https://img.shields.io/badge/PostgreSQL-505050?logo=postgresql&logoColor=FFFFFF&labelColor=4169E1) ![rabbitmq](https://img.shields.io/badge/RabbitMQ-505050?logo=rabbitmq&logoColor=FFFFFF&labelColor=FF6600) [![sonarcloud](https://sonarcloud.io/api/project_badges/measure?project=postech-5soat-grupo-25_hackathon-agendamento&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=postech-5soat-grupo-25_hackathon-agendamento)
+![agendamento](https://img.shields.io/badge/agendamento-blue?color=%23d63865) ![go](https://img.shields.io/badge/Go-505050?logo=go&logoColor=FFFFFF&labelColor=00ADD8) ![postgresql](https://img.shields.io/badge/PostgreSQL-505050?logo=postgresql&logoColor=FFFFFF&labelColor=4169E1) [![sonarcloud](https://sonarcloud.io/api/project_badges/measure?project=postech-5soat-grupo-25_hackathon-agendamento&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=postech-5soat-grupo-25_hackathon-agendamento)
 
 ## Sobre o Projeto
 
