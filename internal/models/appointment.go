@@ -1,10 +1,11 @@
 package models
 
+import "time"
+
 type Appointment struct {
-	Id          int
-	PatientId   int
-	DoctorId    int
-	Date        string
-	Time        string
-	Description string
+	ID             int        `json:"ID"`
+    DoctorID       int        `json:"DoctorID"`
+    ClientID       int        `json:"ClientID"`
+	AppointmentTime time.Time `json:"AppointmentTime"`
+	Description string        `json:"Description"`
 }
