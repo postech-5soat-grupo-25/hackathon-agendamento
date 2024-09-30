@@ -38,6 +38,12 @@ func main() {
 
 	app := fiber.New()
 
+    // Health check endpoint with log
+    app.Get("/health", func(c *fiber.Ctx) error {
+        slog.Log(ctx, slog.LevelInfo, "Health check endpoint hit")
+        return c.SendStatus(200)
+    })
+
     app.Get("/working-hours", func(c *fiber.Ctx) error {
         var msg models.GetDoctorWorkingHoursMessage
         if err := c.QueryParser(&msg); err != nil {
@@ -83,6 +89,5 @@ func main() {
         return c.Status(response.StatusCode).JSON(response)
     })
 
-
-	app.Listen(":3000")	
+	app.Listen(":80")
 }
